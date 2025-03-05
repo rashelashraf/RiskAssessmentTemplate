@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cyber Risk Assessment Tool</title>
+  <style>
+    /* Global Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Header styling */
+    .header-section {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+      margin-bottom: 30px;
+      align-items: start;
+    }
+    .header-section label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .header-section input,
+    .header-section textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Tabs Navigation */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .tabs button {
+      background-color: #f7f7f7;
+      border: none;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      margin-right: 2px;
+    }
+    .tabs button:hover {
+      background-color: #e2e2e2;
+    }
+    .tabs button.active {
+      background-color: #fff;
+      border-bottom: 2px solid #fff;
+    }
+
+    /* Tab Content */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+
+    /* Button groups */
+    .button-group {
+      margin-bottom: 30px;
+      text-align: right;
+    }
+    .button-group button {
+      padding: 8px 12px;
+      margin: 5px 2px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+    .button-group button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Risk Treatment Textarea */
+    .risk-treatment {
+      margin-bottom: 30px;
+    }
+    .risk-treatment textarea {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* Footer styling */
+    .footer-section {
+      text-align: right;
+      font-style: italic;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header: Assessor and Risk Assessment Description -->
+    <div class="header-section">
+      <div>
+        <label for="assessor">Assessor:</label>
+        <input type="text" id="assessor" placeholder="Enter assessor name">
+      </div>
+      <div>
+        <label for="assessmentDesc">Description of Risk Assessment:</label>
+        <textarea id="assessmentDesc" rows="4" placeholder="Enter assessment description"></textarea>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs">
+      <button class="tablinks active" onclick="openTab(event, 'asset')">Asset Identification</button>
+      <button class="tablinks" onclick="openTab(event, 'weighted')">Weighted Factor Analysis</button>
+      <button class="tablinks" onclick="openTab(event, 'tva')">Threat &amp; Vulnerability</button>
+      <button class="tablinks" onclick="openTab(event, 'risk')">Risk Rating</button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="asset" class="tab-content active">
+      <h2>Asset Identification</h2>
+      <table id="assetTable">
+        <thead>
+          <tr>
+            <th>Asset Category</th>
+            <th>Risk Management Component</th>
+            <th>Example Risk Management Component</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="button-group">
+        <button onclick="addRow('assetTable', ['','', ''])">Add Row</button>
+        <button onclick="deleteRow('assetTable')">Delete Row</button>
+        <button onclick="saveData('assetTable', 'asset_identification.csv')">Save Data</button>
+      </div>
+    </div>
+
+    <div id="weighted" class="tab-content">
+      <h2>Weighted Factor Analysis</h2>
+      <table id="weightedTable">
+        <thead>
+          <tr>
+            <th>Information Assets</th>
+            <th>Impact on Revenue</th>
+            <th>Probability of Risk</th>
+            <th>Public Image</th>
+            <th>Weighted Score</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="button-group">
+        <button onclick="addRow('weightedTable', ['', '', '', '', ''])">Add Row</button>
+        <button onclick="deleteRow('weightedTable')">Delete Row</button>
+        <button onclick="updateAssets()">Update Assets</button>
+        <button onclick="calculateWeightedScores()">Calculate</button>
+        <button onclick="saveData('weightedTable', 'weighted_factor_analysis.csv')">Save Data</button>
+      </div>
+    </div>
+
+    <div id="tva" class="tab-content">
+      <h2>Threat &amp; Vulnerability</h2>
+      <table id="tvaTable">
+        <thead>
+          <tr>
+            <th>Threats / Assets</th>
+            <th>Asset 1</th>
+            <th>Asset 2</th>
+            <th>Asset 3</th>
+            <th>Asset 4</th>
+            <th>Asset 5</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="button-group">
+        <button onclick="addRow('tvaTable', ['', '', '', '', '', ''])">Add Row</button>
+        <button onclick="deleteRow('tvaTable')">Delete Row</button>
+        <button onclick="saveData('tvaTable', 'threat_vulnerability.csv')">Save Data</button>
+      </div>
+    </div>
+
+    <div id="risk" class="tab-content">
+      <h2>Risk Rating</h2>
+      <table id="riskTable">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Vulnerability</th>
+            <th>Likelihood</th>
+            <th>Impact</th>
+            <th>Risk Rating</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="button-group">
+        <button onclick="addRow('riskTable', ['', '', '', '', ''])">Add Row</button>
+        <button onclick="deleteRow('riskTable')">Delete Row</button>
+        <button onclick="updateAssets()">Update Assets</button>
+        <button onclick="calculateRisk()">Calculate</button>
+        <button onclick="saveData('riskTable', 'risk_rating.csv')">Save Data</button>
+      </div>
+    </div>
+
+    <!-- Risk Treatment Approaches Section -->
+    <div class="risk-treatment">
+      <h2>Risk Treatment Approaches:</h2>
+      <textarea id="riskTreatment" rows="10" placeholder="Enter risk treatment approaches"></textarea>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-section">
+      <span>Conceptualized and Tested by Dr. Ashraf</span>
+    </div>
+  </div>
+
+  <script>
+    // ----- Tab Switching -----
+    function openTab(evt, tabName) {
+      const tabContents = document.getElementsByClassName("tab-content");
+      const tabButtons = document.getElementsByClassName("tablinks");
+      for (let content of tabContents) {
+        content.classList.remove("active");
+      }
+      for (let btn of tabButtons) {
+        btn.classList.remove("active");
+      }
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    // ----- Utility Functions -----
+    function addRow(tableId, defaultValues) {
+      const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+      const row = tableBody.insertRow();
+      defaultValues.forEach((val, index) => {
+        const cell = row.insertCell();
+        const input = document.createElement('input');
+        input.type = "text";
+        input.value = val;
+        input.style.width = "100%";
+        // Set read-only for calculated columns (assumed as last column for weighted and risk tables)
+        if ((tableId === 'weightedTable' && index === 4) || (tableId === 'riskTable' && index === 4)) {
+          input.readOnly = true;
+        }
+        cell.appendChild(input);
+      });
+    }
+
+    function deleteRow(tableId) {
+      const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+      if (tableBody.rows.length > 0) {
+        tableBody.deleteRow(-1);
+      }
+    }
+
+    function prePopulate() {
+      const tables = [
+        {id: 'assetTable', defaults: ['', '', '']},
+        {id: 'weightedTable', defaults: ['', '', '', '', '']},
+        {id: 'tvaTable', defaults: ['', '', '', '', '', '']},
+        {id: 'riskTable', defaults: ['', '', '', '', '']}
+      ];
+      tables.forEach(({id, defaults}) => {
+        for (let i = 0; i < 5; i++) {
+          addRow(id, defaults);
+        }
+      });
+    }
+
+    // ----- Calculation Functions -----
+    function calculateWeightedScore(impactRevenue, probRisk, impactImage) {
+      return ((impactRevenue * 30) + (probRisk * 40) + (impactImage * 30)).toFixed(2);
+    }
+
+    function calculateWeightedScores() {
+      const tableBody = document.getElementById('weightedTable').getElementsByTagName('tbody')[0];
+      for (let i = 0; i < tableBody.rows.length; i++) {
+        const cells = tableBody.rows[i].cells;
+        const impactRevenue = parseFloat(cells[1].children[0].value);
+        const probRisk = parseFloat(cells[2].children[0].value);
+        const impactImage = parseFloat(cells[3].children[0].value);
+        if (!isNaN(impactRevenue) && !isNaN(probRisk) && !isNaN(impactImage)) {
+          cells[4].children[0].value = calculateWeightedScore(impactRevenue, probRisk, impactImage);
+        } else {
+          alert("Please enter valid numeric values for Impact on Revenue, Probability of Risk, and Public Image in all rows.");
+          return;
+        }
+      }
+    }
+
+    function calculateRisk() {
+      const tableBody = document.getElementById('riskTable').getElementsByTagName('tbody')[0];
+      for (let i = 0; i < tableBody.rows.length; i++) {
+        const cells = tableBody.rows[i].cells;
+        const likelihood = parseInt(cells[2].children[0].value);
+        const impact = parseInt(cells[3].children[0].value);
+        if (!isNaN(likelihood) && !isNaN(impact)) {
+          cells[4].children[0].value = (likelihood * impact);
+        } else {
+          alert("Please enter valid numeric values for Likelihood and Impact in all rows.");
+          return;
+        }
+      }
+    }
+
+    // ----- Update Assets from Asset Identification -----
+    function updateAssets() {
+      const assetBody = document.getElementById('assetTable').getElementsByTagName('tbody')[0];
+      let assetValues = [];
+      for (let i = 0; i < assetBody.rows.length; i++) {
+        assetValues.push(assetBody.rows[i].cells[0].children[0].value);
+      }
+      ['weightedTable', 'riskTable'].forEach(tableId => {
+        const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+        for (let i = 0; i < tableBody.rows.length; i++) {
+          if (i < assetValues.length) {
+            tableBody.rows[i].cells[0].children[0].value = assetValues[i];
+          }
+        }
+      });
+    }
+
+    // ----- Save Data as CSV -----
+    function saveData(tableId, filename) {
+      let csvContent = "";
+      const table = document.getElementById(tableId);
+      // Headers
+      const headers = table.querySelectorAll("th");
+      let headerArr = [];
+      headers.forEach(header => headerArr.push('"' + header.innerText + '"'));
+      csvContent += headerArr.join(",") + "\n";
+      // Rows
+      const rows = table.getElementsByTagName('tbody')[0].rows;
+      for (let i = 0; i < rows.length; i++) {
+        let rowData = [];
+        for (let j = 0; j < rows[i].cells.length; j++) {
+          rowData.push('"' + rows[i].cells[j].children[0].value + '"');
+        }
+        csvContent += rowData.join(",") + "\n";
+      }
+      // Download CSV file
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      alert("Data saved as " + filename);
+    }
+
+    // ----- Disable Paste in Risk Treatment Textarea -----
+    document.getElementById("riskTreatment").addEventListener("paste", function(e) {
+      e.preventDefault();
+      return false;
+    });
+    document.getElementById("riskTreatment").addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+    // ----- On Load -----
+    window.onload = prePopulate;
+  </script>
+</body>
+</html>
