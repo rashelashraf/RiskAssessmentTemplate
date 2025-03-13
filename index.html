@@ -927,7 +927,7 @@
         var impact = parseFloat(cells[1].querySelector('input').value) || 0;
         var probability = parseFloat(cells[2].querySelector('input').value) || 0;
         var image = parseFloat(cells[3].querySelector('input').value) || 0;
-        var weightedScore = ((impact * weightRevenue) + (probability * weightProbability) + (image * weightImage)) / 100;
+        var weightedScore = ((impact * weightRevenue) + (probability * weightProbability) + (image * weightImage));
         cells[4].querySelector('input').value = weightedScore.toFixed(2);
       }
       alert("Weighted scores calculated.");
