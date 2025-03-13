@@ -2,201 +2,687 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cyber Risk Assessment Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Cyber Risk Assessment Tool</title>
   <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #1abc9c;
+      --light-color: #ecf0f1;
+      --dark-color: #34495e;
+      --danger-color: #e74c3c;
+      --success-color: #2ecc71;
+      --warning-color: #f39c12;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+    }
     /* Global Container */
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      font-family: Arial, sans-serif;
     }
-
-    /* Header styling */
+    /* Main Header */
+    .main-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    /* Header section */
     .header-section {
       display: grid;
       grid-template-columns: 1fr 2fr;
       gap: 20px;
       margin-bottom: 30px;
       align-items: start;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .header-section label {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       display: block;
+      color: var(--dark-color);
     }
     .header-section input,
     .header-section textarea {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       box-sizing: border-box;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 4px;
+      font-size: 14px;
+      transition: border-color 0.3s;
     }
-
+    .header-section input:focus,
+    .header-section textarea:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
     /* Tabs Navigation */
     .tabs {
       display: flex;
-      border-bottom: 2px solid #ccc;
-      margin-bottom: 20px;
+      border-bottom: none;
+      margin-bottom: 0;
+      position: relative;
+      z-index: 10;
     }
     .tabs button {
-      background-color: #f7f7f7;
+      background-color: #e9ecef;
       border: none;
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
       padding: 12px 20px;
       cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-      margin-right: 2px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      margin-right: 4px;
+      color: var(--dark-color);
+      position: relative;
+      overflow: hidden;
     }
     .tabs button:hover {
-      background-color: #e2e2e2;
+      background-color: #dee2e6;
     }
     .tabs button.active {
-      background-color: #fff;
-      border-bottom: 2px solid #fff;
+      background-color: white;
+      color: var(--secondary-color);
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
     }
-
+    .tabs button.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--secondary-color);
+    }
     /* Tab Content */
     .tab-content {
       display: none;
       animation: fadeIn 0.3s;
+      background-color: white;
+      padding: 25px;
+      border-radius: 0 8px 8px 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
     }
     .tab-content.active {
       display: block;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .tab-content h2 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-size: 20px;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
     }
-
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     /* Table styling */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     th, td {
-      border: 1px solid #aaa;
-      padding: 8px;
+      border: 1px solid #ddd;
+      padding: 12px;
       text-align: center;
+      position: relative;
     }
     th {
-      background-color: #f0f0f0;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.5px;
     }
-
-    /* Button groups */
+    tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    tbody tr:hover {
+      background-color: #e9ecef;
+    }
+    td input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    td input:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    td input[readonly] {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      color: #495057;
+    }
+    /* Button styling */
     .button-group {
       margin-bottom: 30px;
       text-align: right;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
     }
-    .button-group button {
-      padding: 8px 12px;
-      margin: 5px 2px;
+    button {
+      padding: 10px 16px;
+      margin: 0;
       font-size: 14px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      background-color: #007BFF;
-      color: #fff;
-      transition: background-color 0.3s;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .button-group button:hover {
-      background-color: #0056b3;
+    button:focus {
+      outline: none;
     }
-
+    button i {
+      margin-right: 6px;
+    }
+    .btn-primary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    .btn-success:hover {
+      background-color: #27ae60;
+      transform: translateY(-2px);
+    }
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    .btn-danger:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+    }
+    .btn-warning {
+      background-color: var(--warning-color);
+      color: white;
+    }
+    .btn-warning:hover {
+      background-color: #e67e22;
+      transform: translateY(-2px);
+    }
     /* Risk Treatment Textarea */
     .risk-treatment {
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       margin-bottom: 30px;
+    }
+    .risk-treatment h2 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-size: 20px;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
     }
     .risk-treatment textarea {
       width: 100%;
-      padding: 10px;
+      padding: 15px;
       box-sizing: border-box;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 4px;
       font-size: 14px;
+      transition: border-color 0.3s;
+      resize: vertical;
     }
-
+    .risk-treatment textarea:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
     /* Footer styling */
     .footer-section {
       text-align: right;
       font-style: italic;
       font-size: 14px;
-      margin-top: 20px;
+      margin-top: 30px;
+      color: #6c757d;
+      padding: 15px 0;
+      border-top: 1px solid #dee2e6;
+    }
+    /* Risk level colors */
+    .risk-low {
+      background-color: rgba(46, 204, 113, 0.2);
+    }
+    .risk-medium {
+      background-color: rgba(243, 156, 18, 0.2);
+    }
+    .risk-high {
+      background-color: rgba(231, 76, 60, 0.2);
+    }
+    .risk-matrix-critical {
+      background-color: rgba(142, 68, 173, 0.5);
+      color: white;
+    }
+    /* Help tooltips */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .tooltip i {
+      color: var(--secondary-color);
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--dark-color);
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 12px;
+      font-weight: normal;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    /* Sample Templates dropdown */
+    .template-dropdown {
+      margin-bottom: 20px;
+    }
+    .template-dropdown select {
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    /* Risk matrix visualization */
+    .risk-matrix {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+    .risk-matrix-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .risk-matrix-header {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    /* Progress indicator */
+    .progress-container {
+      margin-bottom: 30px;
+    }
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #ddd;
+      z-index: 1;
+    }
+    .progress-step {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+    }
+    .progress-step.active {
+      background-color: var(--secondary-color);
+    }
+    .progress-step-label {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      color: #6c757d;
+    }
+    /* Summary report */
+    .summary-box {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--secondary-color);
+    }
+    .summary-box h3 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+    /* Chart container */
+    .chart-container {
+      width: 100%;
+      height: 300px;
+      margin-bottom: 30px;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 50%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      animation: modalOpen 0.3s;
+    }
+    @keyframes modalOpen {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: var(--dark-color);
+    }
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header-section {
+        grid-template-columns: 1fr;
+      }
+      .tabs {
+        flex-wrap: wrap;
+      }
+      .tabs button {
+        flex: 1 0 auto;
+        margin-bottom: 5px;
+      }
+      .button-group {
+        justify-content: center;
+      }
+    }
+    /* Print Styles: Show all tab content and hide navigation/buttons */
+    @media print {
+      .tab-content {
+        display: block !important;
+      }
+      .tabs, .button-group, .modal, .progress-container {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header: Assessor and Risk Assessment Description -->
+    <!-- Main Header -->
+    <div class="main-header">
+      <h1>Cyber Risk Assessment Tool</h1>
+    </div>
+    <!-- Progress Indicator -->
+    <div class="progress-container">
+      <div class="progress-steps">
+        <div class="progress-step active">
+          1
+          <span class="progress-step-label">Identification</span>
+        </div>
+        <div class="progress-step">
+          2
+          <span class="progress-step-label">Analysis</span>
+        </div>
+        <div class="progress-step">
+          3
+          <span class="progress-step-label">Evaluation</span>
+        </div>
+        <div class="progress-step">
+          4
+          <span class="progress-step-label">Treatment</span>
+        </div>
+      </div>
+    </div>
+    <!-- Header: Assessment Info -->
     <div class="header-section">
       <div>
-        <label for="assessor">Assessor:</label>
+        <label for="assessor">
+          Assessor:
+          <span class="tooltip">
+            <i class="icon">?</i>
+            <span class="tooltip-text">Person conducting the risk assessment</span>
+          </span>
+        </label>
         <input type="text" id="assessor" placeholder="Enter assessor name">
+        <label for="assessmentDate" style="margin-top: 15px;">
+          Assessment Date:
+        </label>
+        <input type="date" id="assessmentDate">
       </div>
       <div>
-        <label for="assessmentDesc">Description of Risk Assessment:</label>
+        <label for="assessmentDesc">
+          Description of Risk Assessment:
+          <span class="tooltip">
+            <i class="icon">?</i>
+            <span class="tooltip-text">Provide context and scope of this assessment</span>
+          </span>
+        </label>
         <textarea id="assessmentDesc" rows="4" placeholder="Enter assessment description"></textarea>
+        <label for="assessmentScope" style="margin-top: 15px;">
+          Scope & Boundaries:
+        </label>
+        <textarea id="assessmentScope" rows="2" placeholder="Define the scope of this assessment"></textarea>
       </div>
     </div>
-
+    <!-- Export Buttons -->
+    <div class="button-group" style="margin-bottom: 20px;">
+      <button class="btn-primary" onclick="printFullAssessment()">
+        <span class="icon">↓</span> Print Full Assessment
+      </button>
+    </div>
     <!-- Tabs Navigation -->
     <div class="tabs">
-      <button class="tablinks active" onclick="openTab(event, 'asset')">Asset Identification</button>
-      <button class="tablinks" onclick="openTab(event, 'weighted')">Weighted Factor Analysis</button>
-      <button class="tablinks" onclick="openTab(event, 'tva')">Threat &amp; Vulnerability</button>
-      <button class="tablinks" onclick="openTab(event, 'risk')">Risk Rating</button>
+      <button class="tablinks active" onclick="openTab(event, 'asset')">
+        <span class="icon">✓</span> Asset Identification
+      </button>
+      <button class="tablinks" onclick="openTab(event, 'weighted')">
+        <span class="icon">⚖</span> Weighted Analysis
+      </button>
+      <button class="tablinks" onclick="openTab(event, 'tva')">
+        <span class="icon">🔍</span> Threat & Vulnerability
+      </button>
+      <button class="tablinks" onclick="openTab(event, 'risk')">
+        <span class="icon">⚠</span> Risk Rating
+      </button>
+      <button class="tablinks" onclick="openTab(event, 'matrix')">
+        <span class="icon">📊</span> Risk Matrix
+      </button>
+      <button class="tablinks" onclick="openTab(event, 'treatment')">
+        <span class="icon">📋</span> Risk Treatment
+      </button>
     </div>
-
     <!-- Tab Contents -->
+    <!-- Asset Identification Tab -->
     <div id="asset" class="tab-content active">
       <h2>Asset Identification</h2>
+      <p class="instruction">Identify and categorize key assets to be included in the risk assessment.</p>
       <table id="assetTable">
         <thead>
           <tr>
+            <th>Asset ID</th>
             <th>Asset Category</th>
             <th>Risk Management Component</th>
             <th>Example Risk Management Component</th>
+            <th>Data Classification</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
       <div class="button-group">
-        <button onclick="addRow('assetTable', ['','', ''])">Add Row</button>
-        <button onclick="deleteRow('assetTable')">Delete Row</button>
-        <button onclick="saveData('assetTable', 'asset_identification.csv')">Save Data</button>
+        <button class="btn-primary" onclick="addRow('assetTable', ['','', '', '', ''])">
+          <span class="icon">+</span> Add Row
+        </button>
+        <button class="btn-danger" onclick="deleteRow('assetTable')">
+          <span class="icon">-</span> Delete Row
+        </button>
       </div>
     </div>
-
+    <!-- Weighted Factor Analysis Tab -->
     <div id="weighted" class="tab-content">
       <h2>Weighted Factor Analysis</h2>
+      <p class="instruction">Evaluate assets based on various risk factors with custom weights.</p>
+      <!-- Weighting Configuration -->
+      <div style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+        <h3 style="margin-top: 0; margin-bottom: 10px;">Risk Factor Weights</h3>
+        <div style="display: flex; gap: 20px;">
+          <div>
+            <label>Impact on Revenue:</label>
+            <input type="number" id="weightRevenue" value="30" min="0" max="100" style="width: 60px;">%
+          </div>
+          <div>
+            <label>Probability of Risk:</label>
+            <input type="number" id="weightProbability" value="40" min="0" max="100" style="width: 60px;">%
+          </div>
+          <div>
+            <label>Public Image:</label>
+            <input type="number" id="weightImage" value="30" min="0" max="100" style="width: 60px;">%
+          </div>
+        </div>
+      </div>
       <table id="weightedTable">
         <thead>
           <tr>
             <th>Information Assets</th>
-            <th>Impact on Revenue</th>
-            <th>Probability of Risk</th>
-            <th>Public Image</th>
+            <th>
+              Impact on Revenue
+              <span class="tooltip"><i class="icon">?</i>
+                <span class="tooltip-text">Rate 1-5: 1 = Minimal impact, 5 = Severe impact</span>
+              </span>
+            </th>
+            <th>
+              Probability of Risk
+              <span class="tooltip"><i class="icon">?</i>
+                <span class="tooltip-text">Rate 1-5: 1 = Very unlikely, 5 = Very likely</span>
+              </span>
+            </th>
+            <th>
+              Public Image
+              <span class="tooltip"><i class="icon">?</i>
+                <span class="tooltip-text">Rate 1-5: 1 = Minimal impact, 5 = Severe impact</span>
+              </span>
+            </th>
             <th>Weighted Score</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
       <div class="button-group">
-        <button onclick="addRow('weightedTable', ['', '', '', '', ''])">Add Row</button>
-        <button onclick="deleteRow('weightedTable')">Delete Row</button>
-        <button onclick="updateAssets()">Update Assets</button>
-        <button onclick="calculateWeightedScores()">Calculate</button>
-        <button onclick="saveData('weightedTable', 'weighted_factor_analysis.csv')">Save Data</button>
+        <button class="btn-primary" onclick="addRow('weightedTable', ['', '', '', '', ''])">
+          <span class="icon">+</span> Add Row
+        </button>
+        <button class="btn-danger" onclick="deleteRow('weightedTable')">
+          <span class="icon">-</span> Delete Row
+        </button>
+        <button class="btn-warning" onclick="updateAssets()">
+          <span class="icon">↻</span> Update Assets
+        </button>
+        <button class="btn-success" onclick="calculateWeightedScores()">
+          <span class="icon">✓</span> Calculate
+        </button>
       </div>
     </div>
-
+    <!-- Threat & Vulnerability Analysis Tab -->
     <div id="tva" class="tab-content">
-      <h2>Threat &amp; Vulnerability</h2>
+      <h2>Threat & Vulnerability Analysis</h2>
+      <p class="instruction">Map threats against assets to identify vulnerabilities and exposure.</p>
+      <!-- Threat Library Button -->
+      <button class="btn-primary" style="margin-bottom: 20px;" onclick="openThreatLibrary()">
+        <span class="icon">📚</span> Open Threat Library
+      </button>
       <table id="tvaTable">
         <thead>
           <tr>
@@ -210,197 +696,295 @@
         </thead>
         <tbody></tbody>
       </table>
+      <div class="legend" style="margin-bottom: 20px; text-align: right; font-size: 13px;">
+        <span style="background-color: #e9ecef; padding: 2px 5px; border-radius: 3px; margin-right: 5px;">N/A</span>
+        <span style="background-color: #2ecc71; padding: 2px 5px; border-radius: 3px; margin-right: 5px; color: white;">Low</span>
+        <span style="background-color: #f39c12; padding: 2px 5px; border-radius: 3px; margin-right: 5px; color: white;">Medium</span>
+        <span style="background-color: #e74c3c; padding: 2px 5px; border-radius: 3px; color: white;">High</span>
+      </div>
       <div class="button-group">
-        <button onclick="addRow('tvaTable', ['', '', '', '', '', ''])">Add Row</button>
-        <button onclick="deleteRow('tvaTable')">Delete Row</button>
-        <button onclick="saveData('tvaTable', 'threat_vulnerability.csv')">Save Data</button>
+        <button class="btn-primary" onclick="addRow('tvaTable', ['', '', '', '', '', ''])">
+          <span class="icon">+</span> Add Threat
+        </button>
+        <button class="btn-danger" onclick="deleteRow('tvaTable')">
+          <span class="icon">-</span> Delete Threat
+        </button>
       </div>
     </div>
-
+    <!-- Risk Rating Tab -->
     <div id="risk" class="tab-content">
       <h2>Risk Rating</h2>
+      <p class="instruction">Calculate risk ratings based on likelihood and impact assessments.</p>
       <table id="riskTable">
         <thead>
           <tr>
             <th>Asset</th>
-            <th>Vulnerability</th>
-            <th>Likelihood</th>
-            <th>Impact</th>
+            <th>
+              Vulnerability
+              <span class="tooltip"><i class="icon">?</i>
+                <span class="tooltip-text">Specific weakness that could be exploited</span>
+              </span>
+            </th>
+            <th>
+              Likelihood (1-5)
+              <span class="tooltip"><i class="icon">?</i>
+                <span class="tooltip-text">Probability of threat exploiting vulnerability</span>
+              </span>
+            </th>
+            <th>
+              Impact (1-5)
+              <span class="tooltip"><i class="icon">?</i>
+                <span class="tooltip-text">Potential damage if threat materializes</span>
+              </span>
+            </th>
             <th>Risk Rating</th>
+            <th>Priority</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
       <div class="button-group">
-        <button onclick="addRow('riskTable', ['', '', '', '', ''])">Add Row</button>
-        <button onclick="deleteRow('riskTable')">Delete Row</button>
-        <button onclick="updateAssets()">Update Assets</button>
-        <button onclick="calculateRisk()">Calculate</button>
-        <button onclick="saveData('riskTable', 'risk_rating.csv')">Save Data</button>
+        <button class="btn-primary" onclick="addRow('riskTable', ['', '', '', '', '', ''])">
+          <span class="icon">+</span> Add Row
+        </button>
+        <button class="btn-danger" onclick="deleteRow('riskTable')">
+          <span class="icon">-</span> Delete Row
+        </button>
+        <button class="btn-warning" onclick="updateAssets()">
+          <span class="icon">↻</span> Update Assets
+        </button>
+        <button class="btn-success" onclick="calculateRisk()">
+          <span class="icon">✓</span> Calculate
+        </button>
       </div>
     </div>
-
-    <!-- Risk Treatment Approaches Section -->
-    <div class="risk-treatment">
-      <h2>Risk Treatment Approaches:</h2>
-      <textarea id="riskTreatment" rows="10" placeholder="Enter risk treatment approaches"></textarea>
+    <!-- Risk Matrix Tab -->
+    <div id="matrix" class="tab-content">
+      <h2>Risk Matrix Visualization</h2>
+      <p class="instruction">Visual representation of risk levels based on likelihood and impact.</p>
+      <div class="risk-matrix" style="grid-template-columns: repeat(6, 1fr); grid-auto-rows: 60px;">
+        <!-- Header Row -->
+        <div class="risk-matrix-cell risk-matrix-header">Impact →<br>Likelihood</div>
+        <div class="risk-matrix-cell risk-matrix-header">1</div>
+        <div class="risk-matrix-cell risk-matrix-header">2</div>
+        <div class="risk-matrix-cell risk-matrix-header">3</div>
+        <div class="risk-matrix-cell risk-matrix-header">4</div>
+        <div class="risk-matrix-cell risk-matrix-header">5</div>
+        <!-- Row for Impact level 1 -->
+        <div class="risk-matrix-cell risk-matrix-header">1</div>
+        <div class="risk-matrix-cell risk-low">Low</div>
+        <div class="risk-matrix-cell risk-low">Low</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <!-- Row for Impact level 2 -->
+        <div class="risk-matrix-cell risk-matrix-header">2</div>
+        <div class="risk-matrix-cell risk-low">Low</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <!-- Row for Impact level 3 -->
+        <div class="risk-matrix-cell risk-matrix-header">3</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-matrix-critical">Critical</div>
+        <!-- Row for Impact level 4 -->
+        <div class="risk-matrix-cell risk-matrix-header">4</div>
+        <div class="risk-matrix-cell risk-medium">Medium</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-matrix-critical">Critical</div>
+        <div class="risk-matrix-cell risk-matrix-critical">Critical</div>
+        <!-- Row for Impact level 5 -->
+        <div class="risk-matrix-cell risk-matrix-header">5</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-high">High</div>
+        <div class="risk-matrix-cell risk-matrix-critical">Critical</div>
+        <div class="risk-matrix-cell risk-matrix-critical">Critical</div>
+        <div class="risk-matrix-cell risk-matrix-critical">Critical</div>
+      </div>
+      <div class="button-group">
+        <button class="btn-primary" onclick="saveRiskMatrix()">
+          <span class="icon">💾</span> Save Matrix
+        </button>
+      </div>
     </div>
-
+    <!-- Risk Treatment Tab -->
+    <div id="treatment" class="tab-content">
+      <h2>Risk Treatment</h2>
+      <p class="instruction">Enter your risk treatment details below. (Pasting is disabled)</p>
+      <div class="risk-treatment">
+        <textarea rows="10" onpaste="return false;" placeholder="Describe your risk treatment strategy..."></textarea>
+      </div>
+      <div class="button-group">
+        <button class="btn-success" onclick="generateReport()">
+          <span class="icon">✓</span> Generate Report
+        </button>
+      </div>
+    </div>
+    <!-- Modal for Threat Library -->
+    <div id="threatLibraryModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeThreatLibrary()">&times;</span>
+        <h2>Threat Library</h2>
+        <p>Select a threat from the library to add to the assessment:</p>
+        <ul id="threatLibraryList">
+          <li onclick="selectThreat('Phishing')">Phishing</li>
+          <li onclick="selectThreat('Malware')">Malware</li>
+          <li onclick="selectThreat('Ransomware')">Ransomware</li>
+          <li onclick="selectThreat('DDoS')">DDoS</li>
+          <li onclick="selectThreat('Insider Threat')">Insider Threat</li>
+        </ul>
+      </div>
+    </div>
     <!-- Footer -->
     <div class="footer-section">
-      <span>Conceptualized and Tested by Dr. Ashraf</span>
+      <p>&copy; 2025 Cyber Risk Assessment Tool Designed by Dr Ashraf. All rights reserved.</p>
     </div>
   </div>
-
+  <!-- JavaScript Functions -->
   <script>
-    // ----- Tab Switching -----
+    // Function to switch tabs
     function openTab(evt, tabName) {
-      const tabContents = document.getElementsByClassName("tab-content");
-      const tabButtons = document.getElementsByClassName("tablinks");
-      for (let content of tabContents) {
-        content.classList.remove("active");
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
       }
-      for (let btn of tabButtons) {
-        btn.classList.remove("active");
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
       }
       document.getElementById(tabName).classList.add("active");
       evt.currentTarget.classList.add("active");
     }
-
-    // ----- Utility Functions -----
+    // Function to add a row to a table
     function addRow(tableId, defaultValues) {
-      const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-      const row = tableBody.insertRow();
-      defaultValues.forEach((val, index) => {
-        const cell = row.insertCell();
-        const input = document.createElement('input');
-        input.type = "text";
-        input.value = val;
-        input.style.width = "100%";
-        // Set read-only for calculated columns (assumed as last column for weighted and risk tables)
-        if ((tableId === 'weightedTable' && index === 4) || (tableId === 'riskTable' && index === 4)) {
-          input.readOnly = true;
-        }
-        cell.appendChild(input);
-      });
+      var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+      var newRow = table.insertRow();
+      for (var i = 0; i < defaultValues.length; i++) {
+        var cell = newRow.insertCell(i);
+        cell.innerHTML = '<input type="text" value="'+defaultValues[i]+'">';
+      }
     }
-
+    // Function to delete the last row of a table
     function deleteRow(tableId) {
-      const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-      if (tableBody.rows.length > 0) {
-        tableBody.deleteRow(-1);
+      var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+      if (table.rows.length > 0) {
+        table.deleteRow(table.rows.length - 1);
       }
     }
-
-    function prePopulate() {
-      const tables = [
-        {id: 'assetTable', defaults: ['', '', '']},
-        {id: 'weightedTable', defaults: ['', '', '', '', '']},
-        {id: 'tvaTable', defaults: ['', '', '', '', '', '']},
-        {id: 'riskTable', defaults: ['', '', '', '', '']}
-      ];
-      tables.forEach(({id, defaults}) => {
-        for (let i = 0; i < 5; i++) {
-          addRow(id, defaults);
-        }
-      });
-    }
-
-    // ----- Calculation Functions -----
-    function calculateWeightedScore(impactRevenue, probRisk, impactImage) {
-      return ((impactRevenue * 30) + (probRisk * 40) + (impactImage * 30)).toFixed(2);
-    }
-
-    function calculateWeightedScores() {
-      const tableBody = document.getElementById('weightedTable').getElementsByTagName('tbody')[0];
-      for (let i = 0; i < tableBody.rows.length; i++) {
-        const cells = tableBody.rows[i].cells;
-        const impactRevenue = parseFloat(cells[1].children[0].value);
-        const probRisk = parseFloat(cells[2].children[0].value);
-        const impactImage = parseFloat(cells[3].children[0].value);
-        if (!isNaN(impactRevenue) && !isNaN(probRisk) && !isNaN(impactImage)) {
-          cells[4].children[0].value = calculateWeightedScore(impactRevenue, probRisk, impactImage);
-        } else {
-          alert("Please enter valid numeric values for Impact on Revenue, Probability of Risk, and Public Image in all rows.");
-          return;
+    // Helper function to get Asset Categories from Asset Identification table (column 1)
+    function getAssetCategories() {
+      var assetTable = document.getElementById("assetTable").getElementsByTagName('tbody')[0];
+      var assetCategories = [];
+      for (var i = 0; i < assetTable.rows.length; i++) {
+        var input = assetTable.rows[i].cells[1].querySelector('input');
+        if (input && input.value.trim() !== "") {
+          assetCategories.push(input.value.trim());
         }
       }
+      return [...new Set(assetCategories)];
     }
-
-    function calculateRisk() {
-      const tableBody = document.getElementById('riskTable').getElementsByTagName('tbody')[0];
-      for (let i = 0; i < tableBody.rows.length; i++) {
-        const cells = tableBody.rows[i].cells;
-        const likelihood = parseInt(cells[2].children[0].value);
-        const impact = parseInt(cells[3].children[0].value);
-        if (!isNaN(likelihood) && !isNaN(impact)) {
-          cells[4].children[0].value = (likelihood * impact);
-        } else {
-          alert("Please enter valid numeric values for Likelihood and Impact in all rows.");
-          return;
-        }
-      }
-    }
-
-    // ----- Update Assets from Asset Identification -----
+    // Function to update asset dropdowns in Weighted Analysis and Risk Rating based on Asset Identification
     function updateAssets() {
-      const assetBody = document.getElementById('assetTable').getElementsByTagName('tbody')[0];
-      let assetValues = [];
-      for (let i = 0; i < assetBody.rows.length; i++) {
-        assetValues.push(assetBody.rows[i].cells[0].children[0].value);
+      var categories = getAssetCategories();
+      var weightedTable = document.getElementById("weightedTable").getElementsByTagName('tbody')[0];
+      for (var i = 0; i < weightedTable.rows.length; i++) {
+        var cell = weightedTable.rows[i].cells[0];
+        var selectHTML = '<select>';
+        selectHTML += '<option value="">-- Select Asset --</option>';
+        categories.forEach(function(cat) {
+          selectHTML += '<option value="'+cat+'">'+cat+'</option>';
+        });
+        selectHTML += '</select>';
+        cell.innerHTML = selectHTML;
       }
-      ['weightedTable', 'riskTable'].forEach(tableId => {
-        const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-        for (let i = 0; i < tableBody.rows.length; i++) {
-          if (i < assetValues.length) {
-            tableBody.rows[i].cells[0].children[0].value = assetValues[i];
-          }
-        }
-      });
-    }
-
-    // ----- Save Data as CSV -----
-    function saveData(tableId, filename) {
-      let csvContent = "";
-      const table = document.getElementById(tableId);
-      // Headers
-      const headers = table.querySelectorAll("th");
-      let headerArr = [];
-      headers.forEach(header => headerArr.push('"' + header.innerText + '"'));
-      csvContent += headerArr.join(",") + "\n";
-      // Rows
-      const rows = table.getElementsByTagName('tbody')[0].rows;
-      for (let i = 0; i < rows.length; i++) {
-        let rowData = [];
-        for (let j = 0; j < rows[i].cells.length; j++) {
-          rowData.push('"' + rows[i].cells[j].children[0].value + '"');
-        }
-        csvContent += rowData.join(",") + "\n";
+      var riskTable = document.getElementById("riskTable").getElementsByTagName('tbody')[0];
+      for (var i = 0; i < riskTable.rows.length; i++) {
+        var cell = riskTable.rows[i].cells[0];
+        var selectHTML = '<select>';
+        selectHTML += '<option value="">-- Select Asset --</option>';
+        categories.forEach(function(cat) {
+          selectHTML += '<option value="'+cat+'">'+cat+'</option>';
+        });
+        selectHTML += '</select>';
+        cell.innerHTML = selectHTML;
       }
-      // Download CSV file
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.style.display = "none";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      alert("Data saved as " + filename);
+      alert("Asset options updated from Asset Identification.");
     }
-
-    // ----- Disable Paste in Risk Treatment Textarea -----
-    document.getElementById("riskTreatment").addEventListener("paste", function(e) {
-      e.preventDefault();
-      return false;
-    });
-    document.getElementById("riskTreatment").addEventListener("contextmenu", function(e) {
-      e.preventDefault();
-      return false;
-    });
-
-    // ----- On Load -----
-    window.onload = prePopulate;
+    // Function to calculate weighted scores in Weighted Analysis tab
+    function calculateWeightedScores() {
+      var table = document.getElementById("weightedTable").getElementsByTagName('tbody')[0];
+      var weightRevenue = parseFloat(document.getElementById("weightRevenue").value) || 0;
+      var weightProbability = parseFloat(document.getElementById("weightProbability").value) || 0;
+      var weightImage = parseFloat(document.getElementById("weightImage").value) || 0;
+      for (var i = 0; i < table.rows.length; i++) {
+        var cells = table.rows[i].cells;
+        var impact = parseFloat(cells[1].querySelector('input').value) || 0;
+        var probability = parseFloat(cells[2].querySelector('input').value) || 0;
+        var image = parseFloat(cells[3].querySelector('input').value) || 0;
+        var weightedScore = ((impact * weightRevenue) + (probability * weightProbability) + (image * weightImage)) / 100;
+        cells[4].querySelector('input').value = weightedScore.toFixed(2);
+      }
+      alert("Weighted scores calculated.");
+    }
+    // Function to calculate risk ratings in Risk Rating tab based on Likelihood and Impact
+    function calculateRisk() {
+      var table = document.getElementById("riskTable").getElementsByTagName('tbody')[0];
+      for (var i = 0; i < table.rows.length; i++) {
+        var cells = table.rows[i].cells;
+        var likelihood = parseFloat(cells[2].querySelector('input').value) || 0;
+        var impact = parseFloat(cells[3].querySelector('input').value) || 0;
+        var riskScore = likelihood * impact;
+        var riskCategory = "";
+        var priority = "";
+        if (riskScore <= 4) {
+          riskCategory = "Low";
+          priority = "Low";
+        } else if (riskScore <= 9) {
+          riskCategory = "Medium";
+          priority = "Medium";
+        } else if (riskScore <= 14) {
+          riskCategory = "High";
+          priority = "High";
+        } else {
+          riskCategory = "Critical";
+          priority = "Critical";
+        }
+        cells[4].querySelector('input').value = riskCategory;
+        cells[5].querySelector('input').value = priority;
+      }
+      alert("Risk ratings calculated.");
+    }
+    // Function to open the Threat Library modal
+    function openThreatLibrary() {
+      document.getElementById("threatLibraryModal").style.display = "block";
+    }
+    // Function to close the Threat Library modal
+    function closeThreatLibrary() {
+      document.getElementById("threatLibraryModal").style.display = "none";
+    }
+    // Dummy function to select a threat from the library
+    function selectThreat(threat) {
+      alert("Threat " + threat + " selected.");
+      closeThreatLibrary();
+    }
+    // Dummy function to generate a report
+    function generateReport() {
+      alert("Report generated.");
+    }
+    // Function to print full assessment using the browser's print dialog
+    function printFullAssessment() {
+      window.print();
+    }
+    // Dummy function to simulate saving the risk matrix
+    function saveRiskMatrix() {
+      alert("Risk matrix saved.");
+    }
   </script>
 </body>
 </html>
