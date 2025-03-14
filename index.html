@@ -979,7 +979,20 @@
     }
     // Function to print full assessment using the browser's print dialog
     function printFullAssessment() {
+      // Add the 'active' class to all tab content elements to ensure they are visible in print
+      var tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(function(tab) {
+        tab.classList.add('active');
+      });
       window.print();
+      // Optional: Restore original tab states after printing
+      // setTimeout(function() {
+      //   tabContents.forEach(function(tab) {
+      //     tab.classList.remove('active');
+      //   });
+      //   // Optionally, re-activate the default tab (e.g., Asset Identification)
+      //   document.getElementById('asset').classList.add('active');
+      // }, 1000);
     }
     // Dummy function to simulate saving the risk matrix
     function saveRiskMatrix() {
